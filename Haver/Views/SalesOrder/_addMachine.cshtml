@@ -1,0 +1,301 @@
+﻿ @model haver.Models.Machine
+
+    <div class="modal fade" id="addMachineModal" tabindex="-1" aria-labelledby="addMachineModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addMachineModalLabel">Add New Machine</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" style="margin:0 auto; width:98%; ">
+                    <form  id="createMachineForm" asp-action="CreateFromModal" asp-controller="Machine" method="post">
+                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <ul id="ErrorList" class="text-danger"></ul>
+                    @* <input type="hidden" id="SalesOrderID" name="SalesOrderID" /> *@
+                  @*   <ul id="ErrorList" class="text-danger"></ul> *@
+
+                        <h6 class="mb-4" style="color: #0C2340;"><b>Fields marked with <span class="text-danger">*</span> are required</b></h6>
+                        <!-- First Row -->
+                        <div class="row">
+                            <!-- Machine Type -->
+                            <div class="form-group col-md-4 mb-3">
+                               @*  <label asp-for="MachineTypeID" class="control-label" style="font-family: 'Avenir Roman', sans-serif; color:#0C2340;">
+                                    <span class="text-danger">*</span> @Html.DisplayNameFor(model => model.MachineTypeID)
+                                    <i class="fas fa-info-circle" data-bs-toggle="tooltip" title="Associated sales order"></i>
+                                </label>
+                                <select asp-for="MachineTypeID" class="form-control"
+                                        style="border-color:#0C2340; font-family: 'Avenir Roman', sans-serif;"
+                                        asp-items="ViewBag.MachineTypeID"></select>
+                                <span asp-validation-for="MachineTypeID" class="text-danger d-block mt-1"></span>
+ *@
+                           
+                            <label asp-for="MachineModel" class="control-label" style="font-family: 'Avenir Roman', sans-serif; color:#0C2340;">
+                                @Html.DisplayNameFor(model => model.MachineModel)  <span class="text-danger">*</span>
+                            </label>
+                            <input asp-for="MachineModel" class="form-control" placeholder="Enter Class - Size x Deck"
+                                   style="border-color:#0C2340; font-family: 'Avenir Roman', sans-serif;" id="companyNameInput" />
+                            <span asp-validation-for="MachineModel" class="text-danger"></span>
+                            </div>
+
+                        <div class="form-group col-md-4 mb-3">
+                            <label asp-for="SalesOrderID" class="control-label" style="font-family: 'Avenir Roman', sans-serif; color:#0C2340;">
+                                @Html.DisplayNameFor(model => model.SalesOrderID) <span class="text-danger">*</span>
+                                <i class="fas fa-info-circle" data-bs-toggle="tooltip" title="Associated sales order"></i>
+                            </label>
+                            <div class="readonly-dropdown">
+                                <select asp-for="SalesOrderID" class="form-control readonly-dropdown"
+                                        style="border-color:#0C2340; font-family: 'Avenir Roman', sans-serif;" asp-items="ViewBag.SalesOrderID">
+                                    <option value="" disabled selected>Select Sales Order</option>
+                                </select>
+                            </div>
+                            <span asp-validation-for="SalesOrderID" class="text-danger d-block mt-1"></span>
+                        </div>
+
+                        <!-- Sales Order -dropdown->
+                            @* <div class="form-group col-md-4 mb-3">
+                                <label asp-for="SalesOrderID" class="control-label" style="font-family: 'Avenir Roman', sans-serif; color:#0C2340;">
+                                    @Html.DisplayNameFor(model => model.SalesOrderID) <span class="text-danger">*</span>
+                                    <i class="fas fa-info-circle" data-bs-toggle="tooltip" title="Associated sales order"></i>
+                                </label>
+                                <div class="readonly-dropdown">
+                                <select asp-for="SalesOrderID" class="form-control"
+                                        style="border-color:#0C2340; font-family: 'Avenir Roman', sans-serif;"
+                                        asp-items="ViewBag.SalesOrderID">
+                                    <option value="" disabled selected>Select Sales Order</option>
+                                </select>
+                                </div>
+                                <span asp-validation-for="SalesOrderID" class="text-danger d-block mt-1"></span>
+                            </div>
+  *@
+
+
+                        <!-- Serial Number -->
+                        <div class="form-group col-md-4 mb-3">
+                            <label asp-for="SerialNumber" class="control-label" style="font-family: 'Avenir Roman', sans-serif; color:#0C2340;">
+                                @Html.DisplayNameFor(model => model.SerialNumber)  <span class="text-danger">*</span>
+                            </label>
+                            <input asp-for="SerialNumber" class="form-control" placeholder="Enter Serial Number"
+                                   style="border-color:#0C2340; font-family: 'Avenir Roman', sans-serif;" />
+                            <span asp-validation-for="SerialNumber" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <!-- Second Row -->
+                    <div class="row">
+                        <div class="form-group col-md-4 mb-3">
+                            <label asp-for="RToShipExp" class="control-label" style="font-family: 'Avenir Roman', sans-serif; color:#0C2340;">
+                                Readiness to ship Exp. <span class="text-danger">*</span>
+                                <i class="fas fa-info-circle" data-bs-toggle="tooltip" title="Expected shipping date"></i>
+                            </label>
+                            <input asp-for="RToShipExp" class="form-control"
+                                   style="border-color:#0C2340; font-family: 'Avenir Roman', sans-serif;" />
+                            <span asp-validation-for="RToShipExp" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group col-md-4 mb-3">
+                            <label asp-for="AssemblyExp" class="control-label" style="font-family: 'Avenir Roman', sans-serif; color:#0C2340;">
+                                @Html.DisplayNameFor(model => model.AssemblyExp)  <span class="text-danger">*</span>
+                                <i class="fas fa-info-circle" data-bs-toggle="tooltip" title="Assembly Expected Date"></i>
+                            </label>
+                            <input asp-for="AssemblyExp" class="form-control"
+                                   style="border-color:#0C2340; font-family: 'Avenir Roman', sans-serif;" />
+                            <span asp-validation-for="AssemblyExp" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group col-md-4 mb-3">
+                            <label asp-for="ProductionOrderNumber" class="control-label" style="font-family: 'Avenir Roman', sans-serif; color:#0C2340;">
+                                @Html.DisplayNameFor(model => model.ProductionOrderNumber)
+                            </label>
+                            <input asp-for="ProductionOrderNumber" class="form-control" placeholder="Enter Production Order No."
+                                   style="border-color:#0C2340; font-family: 'Avenir Roman', sans-serif;" />
+                            <span asp-validation-for="ProductionOrderNumber" class="text-danger"></span>
+                        </div>                                          
+                    </div>
+
+
+                    <div class="row">
+                        <div class="form-group col-md-4 mb-4">
+                            <label asp-for="Nameplate" class="control-label" style="font-family: 'Avenir Roman', sans-serif; color:#0C2340;">
+                                @Html.DisplayNameFor(model => model.Nameplate)
+                            </label>
+                            <select asp-for="Nameplate" class="form-control"
+                                    style="border-color:#0C2340; font-family: 'Avenir Roman', sans-serif;"
+                                    asp-items="Html.GetEnumSelectList<NamePlate>()"></select>
+                            <span asp-validation-for="Nameplate" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group col-md-4 mb-3">
+                            <label asp-for="RToShipA" class="control-label" style="font-family: 'Avenir Roman', sans-serif; color:#0C2340;">
+                                @Html.DisplayNameFor(model => model.RToShipA)
+                                <i class="fas fa-info-circle" data-bs-toggle="tooltip" title="Actual shipping date"></i>
+                            </label>
+                            <input asp-for="RToShipA" class="form-control"
+                                   style="border-color:#0C2340; font-family: 'Avenir Roman', sans-serif;" />
+                            <span asp-validation-for="RToShipA" class="text-danger"></span>
+                        </div>
+                       
+
+                        <div class="form-group col-md-4 mb-3">
+                            <label asp-for="AssemblyStart" class="control-label" style="font-family: 'Avenir Roman', sans-serif; color:#0C2340;">
+                                @Html.DisplayNameFor(model => model.AssemblyStart)
+                                <i class="fas fa-info-circle" data-bs-toggle="tooltip" title="Assembly Start Date"></i>
+                            </label>
+                            <input asp-for="AssemblyStart" class="form-control"
+                                   style="border-color:#0C2340; font-family: 'Avenir Roman', sans-serif;" />
+                            <span asp-validation-for="AssemblyStart" class="text-danger"></span>
+                        </div>
+                    </div>
+                   
+                    <div class="row">
+                        <div class="form-group col-md-4 mb-3">
+                            <label asp-for="AssemblyComplete" class="control-label" style="font-family: 'Avenir Roman', sans-serif; color:#0C2340;">
+                                @Html.DisplayNameFor(model => model.AssemblyComplete)
+                                <i class="fas fa-info-circle" data-bs-toggle="tooltip" title="Assembly Completed Date"></i>
+                            </label>
+                            <input asp-for="AssemblyComplete" class="form-control"
+                                   style="border-color:#0C2340; font-family: 'Avenir Roman', sans-serif;" />
+                            <span asp-validation-for="AssemblyComplete" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group col-md-4 mb-3">
+                            <label asp-for="BudgetedHours" class="control-label" style="font-family: 'Avenir Roman', sans-serif; color:#0C2340;">
+                                @Html.DisplayNameFor(model => model.BudgetedHours)
+                            </label>
+                            <input asp-for="BudgetedHours" class="form-control" placeholder="Enter Budgeted Hours"
+                                   style="border-color:#0C2340; font-family: 'Avenir Roman', sans-serif;" />
+                            <span asp-validation-for="BudgetedHours" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group col-md-4 mb-3">
+                            <label asp-for="ActualAssemblyHours" class="control-label" style="font-family: 'Avenir Roman', sans-serif; color:#0C2340;">
+                                @Html.DisplayNameFor(model => model.ActualAssemblyHours)
+                            </label>
+                            <input asp-for="ActualAssemblyHours" class="form-control" placeholder="Enter Actual Hours"
+                                   style="border-color:#0C2340; font-family: 'Avenir Roman', sans-serif;" />
+                            <span asp-validation-for="ActualAssemblyHours" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group col-md-4 mb-3">
+                            <label asp-for="ReworkHours" class="control-label" style="font-family: 'Avenir Roman', sans-serif; color:#0C2340;">
+                                @Html.DisplayNameFor(model => model.ReworkHours)
+                            </label>
+                            <input asp-for="ReworkHours" class="form-control" placeholder="Enter Rework Hours"
+                                   style="border-color:#0C2340; font-family: 'Avenir Roman', sans-serif;" />
+                            <span asp-validation-for="ReworkHours" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Select Options:</label>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-check">
+                                    <input class="form-check-input" asp-for="Media"
+                                           style="border-color:#0C2340;" />
+                                    <label class="form-check-label" style="font-family: 'Avenir Roman', sans-serif; color:#0C2340;">
+                                        @Html.DisplayNameFor(model => model.Media)
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" asp-for="SpareParts"
+                                           style="border-color:#0C2340;" />
+                                    <label class="form-check-label" style="font-family: 'Avenir Roman', sans-serif; color:#0C2340;">
+                                        @Html.DisplayNameFor(model => model.SpareParts)
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-check">
+                                    <input class="form-check-input" asp-for="Base"
+                                           style="border-color:#0C2340;" />
+                                    <label class="form-check-label" style="font-family: 'Avenir Roman', sans-serif; color:#0C2340;">
+                                        @Html.DisplayNameFor(model => model.Base)
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" asp-for="SparePMedia"
+                                           style="border-color:#0C2340;" />
+                                    <label class="form-check-label" style="font-family: 'Avenir Roman', sans-serif; color:#0C2340;">
+                                        @Html.DisplayNameFor(model => model.SparePMedia)
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-check">
+                                    <input class="form-check-input" asp-for="AirSeal"
+                                           style="border-color:#0C2340;" />
+                                    <label class="form-check-label" style="font-family: 'Avenir Roman', sans-serif; color:#0C2340;">
+                                        @Html.DisplayNameFor(model => model.AirSeal)
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" asp-for="CoatingLining"
+                                           style="border-color:#0C2340;" />
+                                    <label class="form-check-label" style="font-family: 'Avenir Roman', sans-serif; color:#0C2340;">
+                                        @Html.DisplayNameFor(model => model.CoatingLining)
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-check">
+                                    <input class="form-check-input" asp-for="Disassembly"
+                                           style="border-color:#0C2340;" />
+                                    <label class="form-check-label" style="font-family: 'Avenir Roman', sans-serif; color:#0C2340;">
+                                        @Html.DisplayNameFor(model => model.Disassembly)
+                                    </label>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group col-md-6 mb-4">
+                            <label asp-for="PreOrder" class="control-label" style="font-family: 'Avenir Roman', sans-serif; color:#0C2340;">
+                                @Html.DisplayNameFor(model => model.PreOrder)
+                                <i class="fas fa-info-circle" data-bs-toggle="tooltip" title="Pre-orders specifications"></i>
+                            </label>
+                            <textarea asp-for="PreOrder" class="form-control"
+                                      style="border-color:#0C2340; font-family: 'Avenir Roman', sans-serif;"></textarea>
+                            <span asp-validation-for="PreOrder" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group col-md-6 mb-4">
+                            <label asp-for="Scope" class="control-label" style="font-family: 'Avenir Roman', sans-serif; color:#0C2340;">
+                                @Html.DisplayNameFor(model => model.Scope)
+                                <i class="fas fa-info-circle" data-bs-toggle="tooltip" title="Scope details"></i>
+                            </label>
+                            <textarea asp-for="Scope" class="form-control"
+                                      style="border-color:#0C2340; font-family: 'Avenir Roman', sans-serif;"></textarea>
+                            <span asp-validation-for="Scope" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="submit" id="submitMachineCreate" class="btn">Next</button>
+                        <button type="button" class="btn" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn" id="autofillButton">Autofill</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Head {
+    <style>
+        .ui-autocomplete {
+            z-index: 1051 !important;
+            max-height: 200px;
+            overflow-y: auto;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            position: absolute;
+        }
+    </style>
+
+}
+
+

@@ -1,0 +1,19 @@
+﻿@{
+    if (ViewData.ContainsKey("ControllerName"))
+    {
+        if (ViewData.ContainsKey("returnURL"))
+        {
+            <a href='@ViewData["returnURL"]'>Back to the @ViewData["ControllerFriendlyName"] List</a>
+        }
+        else
+        {
+            <a asp-action="Index" class="ms-3 btn btn-sm back-to-list-btn">Back to the @ViewData["ControllerFriendlyName"] List</a>
+        }
+    }
+    else
+    {
+        <a asp-action="Index" class="ms-3 btn btn-sm back-to-list-btn">Back to the List</a>
+    }
+
+}
+

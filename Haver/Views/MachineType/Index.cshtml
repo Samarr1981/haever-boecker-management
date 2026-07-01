@@ -1,0 +1,123 @@
+﻿@model IEnumerable<haver.Models.MachineType>
+
+@{
+    ViewData["Title"] = "Machine Models";
+}
+
+<h1 style="font-weight:bold;text-align:center;" aria-label="Machine Model Index">Machine Models</h1>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <a asp-action="Create" class="btn" aria-label="Create a new machine model" data-bs-toggle="tooltip" title="Create a new machine model">
+        <i class="fa-solid fa-plus"></i> Create New Machine Model
+    </a>
+</div>
+
+<form asp-action="Index" method="get">
+    <input type="hidden" name="sortDirection" value="@ViewData["sortDirection"]" />
+    <input type="hidden" name="sortField" value="@ViewData["sortField"]" />
+<table class="table table-striped table-bordered table-hover shadow-sm">
+    <thead class="bg-dark text-white text-center">
+        <tr>
+            <th class="align-middle">
+                <button class="btn btn-link text-white p-0 fw-bold text-decoration-none" type="submit" name="actionButton" value="Description" aria-label="Sort by Description" data-bs-toggle="tooltip" title="Sort by Description">
+                    Description
+                    @if (ViewData["sortField"]?.ToString() == "Description")
+                    {
+                        <i class="fa-solid @(ViewData["sortDirection"]?.ToString() == "asc" ? "fa-arrow-up" : "fa-arrow-down")"></i>
+                    }
+                </button>
+            </th>
+            <th>Sales Order(s)</th>
+                <th class="align-middle" style="text-align:center;">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+               
+                string collapseId = $"collapseOrders{item.ID}"; 
+
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.Description)</td>
+                    <td class="d-none d-lg-table-cell">
+                        @{
+                            var salesOrders = item.Machines.Select(m => m.SalesOrder).ToList();
+                            int orderCount = salesOrders.Count;
+
+                            if (orderCount > 0)
+                            {
+                                
+                                string firstOrder = salesOrders.FirstOrDefault()?.OrderNumber;
+
+                                if (orderCount > 1)
+                                {
+                                    string orderList = "";
+                                    var c = salesOrders.ToList();
+                                    for (int i = 1; i < orderCount; i++)
+                                    {
+                                        orderList += salesOrders[i].OrderNumber + " <br />";
+                                    }
+
+                                    // Display first order 
+                                    <a class="" role="button" data-bs-toggle="collapse" href="#collapseOrders@(item.ID)"
+                                       aria-expanded="false" aria-controls="collapseOrders@(item.ID)">
+                                        @firstOrder <span class="badge bg-info">@orderCount</span>
+                                    </a>
+                                    <div class="collapse" id="collapseOrders@(item.ID)">
+                                        @Html.Raw(orderList)
+                                    </div>
+                                }
+                                else
+                                {
+                                    @firstOrder
+                                }
+                            }
+                            
+                        }
+                    </td>
+
+
+
+
+                <td class="text-center">
+                    <a asp-action="Edit" asp-route-id="@item.ID" class="btn btn-sm mx-1" aria-label="Edit machine type @item.Description" data-bs-toggle="tooltip" title="Edit machine model">
+                        <i class="fa-solid fa-pen-to-square"></i> Edit
+                    </a>
+@*                     <a asp-action="Details" asp-route-id="@item.ID" class="btn btn-sm mx-1 text-white" aria-label="View details of machine type @item.Description" data-bs-toggle="tooltip" title="View details">
+                        <i class="fa-solid fa-circle-info"></i> Details
+                    </a> *@
+                    <a asp-action="Delete" asp-route-id="@item.ID" class="btn btn-sm mx-1" aria-label="Delete machine type @item.Description" data-bs-toggle="tooltip" title="Delete machine model">
+                        <i class="fa-solid fa-delete-left"></i> Delete
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<partial name="_PagingNavBar" />
+</form>
+@section Scripts {
+    <script type="text/javascript">
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+        })
+    </script>
+
+}
+
+<style>
+    td {
+        cursor: default;
+    }
+    .align-middle button {
+        background: none;
+        outline: none;
+    }
+
+    h1 {
+        margin-bottom: 20px;
+        font-size: 24px;
+    }
+</style>

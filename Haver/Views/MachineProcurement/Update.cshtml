@@ -1,0 +1,135 @@
+﻿@model haver.Models.Procurement
+
+@{
+    ViewData["Title"] = "Update Procurement";
+}
+
+<div class="container-fluid bg-light">
+    <!-- Header -->
+    <div class="row">
+        <div class="col-md-12 py-4" style="background-color:#0C2340;">
+            <h4 class="text-white" style="font-family: 'Avenir Heavy', sans-serif; font-size: 19px;">
+                Update Procurement Information for Machine: @Model.Machine.SerialNumber
+            </h4>
+        </div>
+    </div>
+
+    <!-- Centered Form -->
+    <div class="row py-4">
+        <div class="col-md-8 offset-md-2">
+            <form asp-action="Update" class="border p-4 shadow-sm" aria-label="Update Procurement">
+                <input type="hidden" asp-for="ID" />
+                <input type="hidden" name="MachineID" value="@Model.MachineID" />
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="form-group mb-3 row">
+                    <div class="col-md-6">
+                        <label asp-for="VendorID" class="control-label"
+                               style="font-family: 'Avenir Roman', sans-serif; color:#0C2340;">
+                            Vendor
+                            <i class="fas fa-info-circle" data-bs-toggle="tooltip" title="Select the vendor for this procurement."></i>
+                        </label>
+                        <select asp-for="VendorID" class="form-control" asp-items="ViewBag.VendorID"
+                                style="border-color:#0C2340; font-family: 'Avenir Roman', sans-serif;">
+                        </select>
+                        <span asp-validation-for="VendorID" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="PONumber" class="control-label"
+                               style="font-family: 'Avenir Roman', sans-serif; color:#0C2340;">
+                            PO Number
+                            <i class="fas fa-info-circle" data-bs-toggle="tooltip" title="Enter the Purchase Order Number."></i>
+                        </label>
+                        <input asp-for="PONumber" class="form-control"
+                               style="border-color:#0C2340; font-family: 'Avenir Roman', sans-serif;"
+                               placeholder="Enter PO Number" />
+                        <span asp-validation-for="PONumber" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="form-group mb-3 row">
+
+                    <div class="col-md-6">
+                        <label asp-for="PODueDate" class="control-label"
+                               style="font-family: 'Avenir Roman', sans-serif; color:#0C2340;">
+                            PO Due Date
+                            <i class="fas fa-info-circle" data-bs-toggle="tooltip" title="Enter the PO due date for the procurement."></i>
+                        </label>
+                        <input asp-for="PODueDate" type="date" class="form-control"
+                               style="border-color:#0C2340; font-family: 'Avenir Roman', sans-serif;" />
+                        <span asp-validation-for="PODueDate" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="PORcd" class="control-label"
+                               style="font-family: 'Avenir Roman', sans-serif; color:#0C2340;">
+                            PO Received Date
+                            <i class="fas fa-info-circle" data-bs-toggle="tooltip" title="Enter the PO Received date for the procurement."></i>
+                        </label>
+                        <input asp-for="PORcd" type="date" class="form-control"
+                               style="border-color:#0C2340; font-family: 'Avenir Roman', sans-serif;" />
+                        <span asp-validation-for="PORcd" class="text-danger"></span>
+                    </div>
+
+
+                </div>
+
+
+                <div class="form-group mb-3 row">
+                    <div class="col-md-6">
+                        <label asp-for="QualityICom" class="control-label"
+                               style="font-family: 'Avenir Roman', sans-serif; color:#0C2340;">
+                            Quality Inspection Completed
+                            <i class="fas fa-info-circle" data-bs-toggle="tooltip" title="Check if Quality Inspection is Completed"></i>
+                        </label>
+                        <input class="form-check-input" asp-for="QualityICom" /> 
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="NcrRaised" class="control-label"
+                               style="font-family: 'Avenir Roman', sans-serif; color:#0C2340;">
+                            NCR Raised
+                            <i class="fas fa-info-circle" data-bs-toggle="tooltip" title="Check if NCR is Raised"></i>
+                        </label>
+                        <input class="form-check-input" asp-for="NcrRaised" /> 
+                    </div>
+                    </div>
+
+
+                <!-- Buttons -->
+                <div class="form-group d-flex flex-wrap justify-content-center gap-2 button-group">
+                    <button type="submit" class="btn  action-btn"
+                            style="background-color:#0C2340; border-color:#0C2340; font-family: 'Avenir Heavy', sans-serif;">
+                        Save Changes
+                    </button>
+
+                    <a asp-action="Index" asp-controller="MachineProcurement"
+                       asp-route-machineId="@Model.MachineID"
+                       class="btn btn-secondary action-btn"
+                       style="background-color:#6c757d; border-color:#6c757d; font-family: 'Avenir Heavy', sans-serif;">
+                        <i class="fa fa-arrow-left" aria-hidden="true"></i> Back
+                    </a>
+                </div>
+
+
+               
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('[data-bs-toggle="tooltip"]').tooltip();
+        });
+
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+}

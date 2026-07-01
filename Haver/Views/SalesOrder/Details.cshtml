@@ -1,0 +1,724 @@
+﻿@model haver.Models.SalesOrder
+
+@if (TempData["Message"] != null)
+{
+    <div id="autoDismissAlert" class="alert alert-success alert-dismissible fade show mb-4" role="alert">
+        <i class="fas fa-check-circle"></i>
+        @TempData["Message"]
+
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+
+}
+
+<div id="successMessageContainer"></div>
+
+
+<partial name="_addMachine" model="new haver.Models.Machine()" />
+
+
+
+<div class="modal fade" id="confirmActionModal" tabindex="-1" aria-labelledby="actionModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form id="actionForm" method="post">
+        <input type="hidden" name="id" id="actionIdInput" />
+        <div class="modal-header">
+          <h5 class="modal-title" id="actionModalLabel">Confirm Action</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="actionModalBody" style="color:#0C2340;">
+          <!-- Message filled dynamically -->
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn" id="actionConfirmBtn">Confirm</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="d-flex flex-wrap justify-content-end gap-2 button-group" style="margin-top:10px">
+    @if (Model?.Status == Status.Completed)
+    {
+        <span class="badge bg-success">Completed</span>
+
+        @if (User.IsInRole("Admin") || User.IsInRole("Sales"))
+        {
+            <a href="#" class="btn btn-sm action-btn"
+               data-bs-toggle="modal"
+               data-bs-target="#confirmActionModal"
+               data-action="uncomplete"
+               data-id="@Model?.ID"
+               data-name="@Model?.OrderNumber"
+               title="Unfinalize sales order">
+                <i class="fa-solid fa-bars-progress"></i> UnFinalize
+            </a>
+        }
+
+        <a asp-action="Index" class="btn btn-sm action-btn">
+            <i class="fa fa-arrow-left"></i> Back to List
+        </a>
+
+        <button type="button" onclick="printPrintableArea()" class="btn btn-sm action-btn">
+            <i class="fa-solid fa-print"></i> Print
+        </button>
+    }
+    else
+    {
+        @if (User.IsInRole("Admin") || User.IsInRole("Sales"))
+        {
+            @if (Model?.Status != Status.Archived)
+            {
+                <a asp-action="Edit" asp-route-id="@Model?.ID" class="btn btn-sm action-btn">
+                    <i class="fa-solid fa-pen-to-square"></i> Edit
+                </a>
+            }
+
+            @if (Model?.Status != Status.Completed && Model?.Status != Status.Archived)
+            {
+                <a href="#" class="btn btn-sm action-btn"
+                   data-bs-toggle="modal"
+                   data-bs-target="#confirmActionModal"
+                   data-action="complete"
+                   data-id="@Model?.ID"
+                   data-name="@Model?.OrderNumber"
+                   title="Mark as completed">
+                    <i class="fa fa-check"></i> Mark as Completed
+                </a>
+            }
+        }
+
+        <a asp-action="Index" class="btn btn-sm action-btn">
+            <i class="fa fa-arrow-left"></i> Back to List
+        </a>
+
+        <button type="button" onclick="printPrintableArea()" class="btn btn-sm action-btn">
+            <i class="fa-solid fa-print"></i> Print
+        </button>
+    }
+</div>
+
+
+
+
+
+<div id="printableArea">
+
+
+    <div class="info-container mb-4" style="margin-top:10px">
+        <div class="info-box p-3 bg-light border rounded mb-3">
+            <dl class="row">
+                <dt class="col-md-3">
+                    @Html.DisplayNameFor(model => model.IsDraft)
+                </dt>
+                <dd class="col-md-3">
+                    @Html.DisplayFor(model => model.IsDraft)
+                </dd>
+                <dt class="col-md-3 text-dark">Order Number</dt>
+                <dd class="col-md-3">@Html.DisplayFor(model => model.OrderNumber)</dd>
+
+                <dt class="col-md-3 text-dark">Sales Order Date</dt>
+                <dd class="col-md-3">@Html.DisplayFor(model => model.SoDate)</dd>
+
+                <dt class="col-md-3 text-dark">Readiness to ship</dt>
+                <dd class="col-md-3">@Html.DisplayFor(model => model.DelDt)</dd>
+
+
+                <dt class="col-md-3 text-dark">Price</dt>
+                <dd class="col-md-3">@Html.DisplayFor(model => model.allprice)</dd>
+
+                <dt class="col-md-3 text-dark">Approval Drawings Due</dt>
+                <dd class="col-md-3">@Html.DisplayFor(model => model.AppDwgExp)</dd>
+
+                <dt class="col-md-3 text-dark">Approval Drawings Released</dt>
+                <dd class="col-md-3">@Html.DisplayFor(model => model.AppDwgRel)</dd>
+
+                <dt class="col-md-3 text-dark">Approved Drawings Returned</dt>
+                <dd class="col-md-3">@Html.DisplayFor(model => model.AppDwgRet)</dd>
+
+                <dt class="col-md-3 text-dark">Pre-Orders Due</dt>
+                <dd class="col-md-3">@Html.DisplayFor(model => model.PreOExp)</dd>
+
+                <dt class="col-md-3 text-dark">Pre-Orders Released</dt>
+                <dd class="col-md-3">@Html.DisplayFor(model => model.PreORel)</dd>
+
+                <dt class="col-md-3 text-dark">Engineering Package Due</dt>
+                <dd class="col-md-3">@Html.DisplayFor(model => model.EngPExp)</dd>
+
+                <dt class="col-md-3 text-dark">Engineering Package Released</dt>
+                <dd class="col-md-3">@Html.DisplayFor(model => model.EngPRel)</dd>
+
+                <dt class="col-md-3 text-dark">Customer</dt>
+                <dd class="col-md-3">@Html.DisplayFor(model => model.CompanyName)</dd>
+
+                <dt class="col-md-3 text-dark">Engineers</dt>
+                <dd class="col-md-3">
+                    @{
+                        int specCount = Model.SalesOrderEngineers.Count;
+                        if (specCount > 0)
+                        {
+                            string firstSpec = Model.SalesOrderEngineers.FirstOrDefault().Engineer.EngineerInitialsB;
+                            if (specCount > 1)
+                            {
+                                string specList = "";
+                                var s = Model.SalesOrderEngineers.ToList();
+                                for (int i = 1; i < specCount; i++)
+                                {
+                                    specList += s[i].Engineer.EngineerInitialsB + " <br />";
+                                }
+                                        <a class="engineer-list text-info" role="button" data-bs-toggle="collapse" href="#collapseSpecalty@(Model.ID)" aria-expanded="false" aria-controls="collapseSpecalty@(Model.ID)">
+                                            @firstSpec <span class="badge bg-info">@specCount</span>
+                                        </a>
+                                        <div class="collapse" id="collapseSpecalty@(Model.ID)">
+                                            @Html.Raw(specList)
+                                        </div>
+                            }
+                            else
+                            {
+                                        @firstSpec
+                            }
+                        }
+                        else
+                        {
+                                    <span class="text-muted">None assigned to this Sales Order</span>
+                        }
+                    }
+                </dd>
+
+                <dt class="col-md-3 text-dark">Shipping Terms</dt>
+                <dd class="col-md-3">@Html.DisplayFor(model => model.ShippingTerms)</dd>
+
+                <dt class="col-md-3 text-dark">Created By</dt>
+                <dd class="col-md-3">@Html.DisplayFor(model => model.CreatedBy)</dd>
+
+                <dt class="col-md-3 text-dark">Created On</dt>
+                <dd class="col-md-3">@Html.DisplayFor(model => model.CreatedOn)</dd>
+
+                <dt class="col-md-3 text-dark">Comments</dt>
+                <dd class="col-md-3">@Html.Raw(Model.Comments)</dd>
+
+
+            </dl>
+
+
+            @*  <dl class="row opts">
+            <dt class="col-md-2">@Html.DisplayNameFor(model => Model.Media)</dt>
+            <dd class="col-md-2">@Html.DisplayFor(model => Model.Media)</dd>
+
+            <dt class="col-md-2">@Html.DisplayNameFor(model => Model.SpareParts)</dt>
+            <dd class="col-md-2">@Html.DisplayFor(model => Model.SpareParts)</dd>
+
+            <dt class="col-md-2">@Html.DisplayNameFor(model => Model.SparePMedia)</dt>
+            <dd class="col-md-2">@Html.DisplayFor(model => Model.SparePMedia)</dd>
+
+            <dt class="col-md-2">@Html.DisplayNameFor(model => Model.CoatingLining)</dt>
+            <dd class="col-md-2">@Html.DisplayFor(model => Model.CoatingLining)</dd>
+
+            <dt class="col-md-2">@Html.DisplayNameFor(model => Model.Base)</dt>
+            <dd class="col-md-2">@Html.DisplayFor(model => Model.Base)</dd>
+
+            <dt class="col-md-2">@Html.DisplayNameFor(model => Model.AirSeal)</dt>
+            <dd class="col-md-2">@Html.DisplayFor(model => Model.AirSeal)</dd>
+
+            <dt class="col-md-2">@Html.DisplayNameFor(model => Model.Disassembly)</dt>
+            <dd class="col-md-2">@Html.DisplayFor(model => Model.Disassembly)</dd>
+        
+        </dl> *@
+        </div>
+
+        <div>
+         
+             @if (User.IsInRole("Admin") || User.IsInRole("Sales") || User.IsInRole("Engineering") || User.IsInRole("Production") || User.IsInRole("PIC"))
+                            {
+
+                @if (Model?.Status != Status.Archived && Model?.Status != Status.Completed && Model?.IsDraft == false)
+                {
+                    <button type="button" class="btn btn-outline-secondary"
+                            data-bs-toggle="modal"
+                            data-bs-target="#addMachineModal"
+                            data-salesorderid="@Model?.ID">
+                        &#x2795; Add Machine
+                    </button>
+                }
+
+
+                            }
+
+        </div>
+        <br />
+
+        @if (Model?.Machines != null && Model.Machines.Any())
+        {
+            <div>
+                <h4 class="section-header" id="machinesContainer" style="text-align:center;font-weight:bold;">
+                    Machines and Procurement Information
+                </h4>
+                <div class="table-responsive">
+                <table class="table table-striped table-bordered table-hover shadow-sm procurement-table">
+                    <thead class="bg-dark text-white text-center">
+                        <tr>
+                            <th data-bs-toggle="tooltip" title="Machine Type and Serial Number">Machine Model & Serial Number</th>
+                            <th data-bs-toggle="tooltip" title="Vendor supplying the machine parts">Vendor</th>
+                            <th data-bs-toggle="tooltip" title="Purchase Order Number">PO Number</th>
+                            <th data-bs-toggle="tooltip" title="Official PO Due Date">PO Due Date</th>
+                            <th data-bs-toggle="tooltip" title="Date PO was received">PO Received Date</th>
+                            <th data-bs-toggle="tooltip" title="Is Quality Completed">Quality Completed</th>
+                            <th data-bs-toggle="tooltip" title="NCR Raised">NCR Raised</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var machine in Model.Machines)
+                        {
+                            bool hasProcurements = machine.Procurements != null && machine.Procurements.Any();
+                            bool firstRow = true;
+
+                            if (hasProcurements)
+                            {
+                                foreach (var procurement in machine.Procurements)
+                                {
+                                    <tr>
+                                        @if (firstRow)
+                                        {
+                                            <td rowspan="@machine.Procurements.Count">
+                                                <a href="@Url.Action("Index", "MachineProcurement", new { MachineID = machine.ID })" target="_blank"
+                                                   data-bs-toggle="tooltip" data-bs-placement="bottom" title="Click here to view all information about this machine">
+                                                    @Html.DisplayFor(m => machine.Description)
+                                                </a>
+                                            </td>
+                                            firstRow = false;
+                                        }
+
+                                        <td data-bs-toggle="tooltip" data-bs-placement="bottom" title="Vendor: @procurement.Vendor.Name">@Html.DisplayFor(m => procurement.Vendor.Name)</td>
+                                        <td data-bs-toggle="tooltip" data-bs-placement="bottom" title="PO Number: @procurement.PONumber">@Html.DisplayFor(m => procurement.PONumber)</td>
+                                        <td data-bs-toggle="tooltip" data-bs-placement="bottom" title="PO Due Date: @procurement.PODueDate">@Html.DisplayFor(m => procurement.PODueDate)</td>
+                                        <td data-bs-toggle="tooltip" data-bs-placement="bottom" title="Received on: @procurement.PORcd">@Html.DisplayFor(m => procurement.PORcd)</td>
+                                        <td data-bs-toggle="tooltip" data-bs-placement="bottom" title="Quality Completed">@Html.DisplayFor(m => procurement.QualityICom)</td>
+                                        <td data-bs-toggle="tooltip" data-bs-placement="bottom" title="NCR Raised">@Html.DisplayFor(m => procurement.NcrRaised)</td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td>
+                                        <a href="@Url.Action("Index", "MachineProcurement", new { MachineID = machine.ID })" target="_blank"
+                                           data-bs-toggle="tooltip" data-bs-placement="bottom" title="Click here to view all information about this machine">
+                                            @Html.DisplayFor(m => machine.Description)
+                                        </a>
+                                    </td>
+                                    <td colspan="7" class="text-center text-muted" data-bs-toggle="tooltip" data-bs-placement="bottom" title="No procurement details available">
+                                        No Procurement Details
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+                </div>
+            </div>
+        }
+        else
+        {
+            <p class="text-center text-muted">No machines added to this sales order yet.</p>
+        }
+
+    </div>
+
+</div>
+
+@section Head {
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-bs4.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css">
+
+
+}
+
+@section Scripts {
+    @{
+        @await Html.PartialAsync("_ValidationScriptsPartial")
+    }
+
+    <script src="~/js/mfill.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.2/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-bs4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
+
+
+    <script type="text/javascript">
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+        });
+    </script>
+
+     <script>
+          $(document).on('shown.bs.modal', '#addMachineModal', function () {
+            console.log('Modal dynamically loaded! Initializing autocomplete...');
+           
+            $("#companyNameInput").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: '/Machine/GetMachineModel',
+                        data: { term: request.term },
+                        success: function (data) {
+                            console.log('Data received:', data);
+                            response(data);
+                        },
+                        error: function () {
+                            console.error('Error fetching machine models.');
+                        }
+                    });
+                },
+                minLength: 1,
+                appendTo: "#addMachineModal",
+                open: function () {
+                    var position = $("#companyNameInput").offset();
+                    $(".ui-autocomplete").css({
+                        top: position.top + $("#companyNameInput").outerHeight(),
+                        left: position.left,
+                        width: $("#companyNameInput").outerWidth()
+                    });
+                }
+            });
+        });
+    </script>
+
+    <script>
+    function printPrintableArea() {
+        window.print();
+    }
+
+    </script>
+    <script>
+        $('#submitMachineCreate').click(function (event) {
+            event.preventDefault();
+            $.ajax({
+                type: "POST",
+                url: $('#createMachineForm').attr('action'),
+                headers: { "X-Requested-With": "XMLHttpRequest" },
+                data: $('#createMachineForm').serialize(),
+                success: function (response) {
+                    if (response.success) {
+                        $('#addMachineModal').modal('hide');
+                        $('body').removeClass('modal-open');
+                        $('.modal-backdrop').remove();
+                        localStorage.setItem("successMessage", response.message);  // Store message
+                        window.location.href = response.redirectUrl;
+                    } else {
+                        DisplayErrors(response.errors);
+                    }
+                },
+                error: function (xhr) {
+                    console.error("XHR", xhr);
+                    let errorMessages = [];
+                    switch (xhr.status) {
+                        case 401:
+                            errorMessages.push("You must be logged in first.");
+                            break;
+                        case 403:
+                            errorMessages.push("You are not authorized for this action.");
+                            break;
+                        default:
+                            try {
+                                let response = JSON.parse(xhr.responseText);
+                                console.error("Response", response);
+                                errorMessages = response.errors || ["Error: Unable to complete operation"];
+                            } catch (e) {
+                                console.error("error", e);
+                                errorMessages.push("Error: Unable to complete operation");
+                            }
+                    }
+                    DisplayErrors(errorMessages);
+                }
+            });
+        });
+
+        // Check for stored success message on page load
+        $(document).ready(function () {
+            let message = localStorage.getItem("successMessage");
+            if (message) {
+                $('#successMessageContainer').html(`
+                    <div class="alert alert-success alert-dismissible fade show mb-4" role="alert">
+                        <i class="fas fa-check-circle"></i> ${message}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                `);
+                localStorage.removeItem("successMessage"); // Clear it
+            }
+        });
+
+        function ClearErrors() {
+            $('#ErrorList').empty();
+        }
+
+        function DisplayErrors(errors) {
+            var ul = $('#ErrorList');
+            ul.empty();
+            errors.forEach(function (error) {
+                ul.append('<li>' + error + '</li>');
+            });
+        }
+
+    </script>
+
+    <script>
+        $('#addMachineModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var salesOrderId = button.data('salesorderid');
+
+            var modal = $(this);
+            modal.find('#SalesOrderID').val(salesOrderId);
+            modal.find('select[name="SalesOrderID"]').val(salesOrderId).change();
+        });
+    </script>
+
+    <script>
+        //Adds autocomplete for entering company name
+        $(document).ready(function () {
+            $("#companyNameInput").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: '/SalesOrder/GetMachineModel',
+                        data: { term: request.term },
+                        success: function (data) {
+                            response(data);  // Pass the results back to the autocomplete
+                        }
+                    });
+                },
+                minLength: 1 // Set limit
+            });
+        });
+
+    </script>
+
+
+    <script>
+    const actionModal = document.getElementById('confirmActionModal');
+
+    actionModal.addEventListener('show.bs.modal', function (event) {
+        const button = event.relatedTarget;  // Button that triggered the modal
+        const actionType = button.getAttribute('data-action');
+        const orderId = button.getAttribute('data-id');
+        const orderName = button.getAttribute('data-name');
+
+        const form = actionModal.querySelector('#actionForm');
+        const idInput = actionModal.querySelector('#actionIdInput');
+        const modalTitle = actionModal.querySelector('#actionModalLabel');
+        const modalBody = actionModal.querySelector('#actionModalBody');
+        const confirmBtn = actionModal.querySelector('#actionConfirmBtn');
+
+        // Set ID for form submission
+        idInput.value = orderId;
+
+        if (actionType === 'complete') {
+            form.setAttribute('action', '/SalesOrder/Complete');  
+            modalTitle.textContent = "Confirm Complete";
+            modalBody.innerHTML = `Are you sure you want to mark this sales order as completed ?`;
+            confirmBtn.className = "btn "; 
+        } else {
+            form.setAttribute('action', '/SalesOrder/UnComplete'); 
+            modalTitle.textContent = "Confirm Unfinalize";
+            modalBody.innerHTML = `Are you sure you want to unfinalize this sales order ?`;
+            confirmBtn.className = "btn"; 
+        }
+    });
+</script>
+
+}
+
+<style>
+    @@media print {
+        body * {
+            visibility: hidden;
+        }
+
+       
+       
+        #printableArea, #printableArea * {
+            visibility: visible;
+        }
+
+        #printableArea {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+        }
+
+        .info-box dt {
+            width: 30%;
+            float: left;
+            clear: both;
+            margin-bottom: 0.5rem;
+        }
+
+        .info-box dd {
+            width: 70%;
+            float: left;
+            margin-bottom: 0.5rem;
+        }
+
+        .opts {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px; 
+        }
+
+            .opts dt, .opts dd {
+                display: inline-block;
+                width: auto;
+                margin-right: 15px; 
+            }
+
+                .opts dt::after {
+                    content: ":"; 
+                    margin-right: 5px;
+                }
+        .procurement-table {
+            width: 100% !important;
+            font-size: 12px;
+        }
+
+        .section-header {
+            font-size: 18px !important;
+            margin: 15px 0;
+        }
+
+        .badge, .btn {
+            display: none !important;
+        }
+
+        .bg-light, .bg-dark {
+            background-color: #fff !important;
+        }
+
+        table {
+            page-break-inside: auto !important;
+        }
+
+        tr {
+            page-break-inside: avoid !important;
+        }
+
+     
+    }
+
+    td {
+        cursor: default;
+    }
+
+    .readonly-dropdown select {
+        pointer-events: none; 
+        background-color: #f0f0f0; 
+    }
+
+    .readonly-dropdown {
+        position: relative;
+    }
+
+        .readonly-dropdown::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: transparent;
+            cursor: not-allowed;
+        }
+
+    /* Make table responsive with horizontal scroll on small screens */
+    .table-responsive {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+
+    @@media (max-width: 768px) {
+        .table {
+            font-size: 14px;
+        }
+
+        .kk {
+            margin: 10px;
+        }
+
+        .nav-tabs {
+            flex-direction: column;
+        }
+
+        .nav-item {
+            margin-right: 0;
+            margin-bottom: 5px;
+        }
+
+        .nav-link {
+            padding: 8px 12px;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .actions-cell {
+            min-width: 150px;
+        }
+
+            .actions-cell .btn {
+                margin: 3px 0;
+                font-size: 12px;
+            }
+    }
+
+    /* Medium screens adjustments */
+    @@media (max-width: 992px) {
+        .table {
+            font-size: 15px;
+        }
+
+        .nav-link {
+            padding: 10px 15px;
+            font-size: 15px;
+        }
+    }
+
+
+    .button-group .action-btn {
+    flex: 0 0 auto;
+}
+    /* Make action buttons stack vertically on smaller screens */
+    @@media (max-width: 576px) {
+        .actions-cell .btn {
+            display: block;
+            width: 100%;
+        }
+
+        .button-group {
+            justify-content: center;
+        }
+
+            .button-group .badge {
+                flex: 0 0 100%;
+                text-align: center;
+                margin-bottom: 0.5rem;
+            }
+
+            .button-group .action-btn {
+                flex: 0 0 calc(50% - 0.5rem);
+                max-width: calc(50% - 0.5rem);
+                text-align: center;
+            }
+    }
+
+
+</style>
+

@@ -1,0 +1,175 @@
+﻿@model haver.ViewModels.EmployeeAdminVM
+
+<div class="container-fluid bg-light">
+    <div class="row">
+        <div class="col-md-12 py-4" style="background-color:#0C2340;">
+            <h4 class="text-white" style="font-family: 'Avenir Heavy', sans-serif; font-size: 19px;">
+                Edit User Information
+            </h4>
+        </div>
+    </div>
+
+    <div class="row py-4">
+        <div class="col-md-8 offset-md-2">
+            <form asp-action="Edit" class="border p-4 shadow-sm" aria-label="Edit User Information">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div style="font:bold;font-size:15px;">
+     Note:  Changing Email will reset the password for the new Login and the user will need to use Forgot Password with the new Email.
+    </div>
+    <br />
+                <div class="row"> 
+               
+                    <div class="form-group col-md-6 mb-3">
+                        <label asp-for="FirstName" class="control-label"
+                               style="font-family: 'Avenir Roman', sans-serif; color:#0C2340;">
+                            First Name
+                        </label>
+                        <input asp-for="FirstName" class="form-control"
+                               style="border-color:#0C2340; font-family: 'Avenir Roman', sans-serif;" autofocus />
+                        <span asp-validation-for="FirstName" class="text-danger"></span>
+                    </div>
+
+                 
+                    <div class="form-group col-md-6 mb-3">
+                        <label asp-for="LastName" class="control-label"
+                               style="font-family: 'Avenir Roman', sans-serif; color:#0C2340;">
+                            Last Name
+                        </label>
+                        <input asp-for="LastName" class="form-control"
+                               style="border-color:#0C2340; font-family: 'Avenir Roman', sans-serif;" />
+                        <span asp-validation-for="LastName" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="row">
+                 
+                    <div class="form-group col-md-6 mb-3">
+                        <label asp-for="Phone" class="control-label"
+                               style="font-family: 'Avenir Roman', sans-serif; color:#0C2340;">
+                            Phone
+                        </label>
+                        <input asp-for="Phone" class="form-control"
+                               style="border-color:#0C2340; font-family: 'Avenir Roman', sans-serif;" />
+                        <span asp-validation-for="Phone" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group col-md-6 mb-3">
+                        <label asp-for="Email" class="control-label"
+                               style="font-family: 'Avenir Roman', sans-serif; color:#0C2340;">
+                            Email
+                        </label>
+                        <input asp-for="Email" class="form-control"
+                               style="border-color:#0C2340; font-family: 'Avenir Roman', sans-serif;" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                </div>  
+
+                <!-- Active Status -->
+                <div class="form-group mb-3">
+                    <label class="form-check-label">
+                        <input class="form-check-input " asp-for="Active" /> @Html.DisplayNameFor(model => model.Active)
+                    </label>
+                    @if (Model.Active == true)
+                    {
+                        <div>
+                            <strong>
+                                Warning! If you make this user inactive, their login to the system will also be removed.
+                                If you ever want to allow them to login again, make them Active and let them know they must use Forgot Password to set a new one for this email address.
+                            </strong>
+                        </div>
+                    }
+                    else
+                    {
+                        <div><strong>If you make this user active, let them know to use Forgot Password to set a new one for this email address.</strong></div>
+                    }
+                </div>
+
+                <!-- User Roles -->
+                <div class="form-group mb-3">
+                    <label asp-for="UserRoles" class="control-label"
+                           style="font-family: 'Avenir Roman', sans-serif; color:#0C2340;">
+                        Roles (Use switches below to assign/remove roles.)
+                    </label>
+                    <div class="d-flex flex-wrap gap-3">
+                        @{
+                            List<haver.ViewModels.RoleVM> roles = ViewBag.Roles;
+                            foreach (var role in roles)
+                            {
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input role-switch" type="checkbox"
+                                           id="@role.RoleName-CheckBox"
+                                           name="selectedRoles"
+                                           value="@role.RoleName"
+                                    @(Html.Raw(role.Assigned ? "checked=\"checked\"" : "")) />
+                                    <label class="form-check-label" for="@role.RoleName-CheckBox"
+                                           style="font-weight: bold; cursor: pointer; color: #0056b3;">
+                                        @role.RoleName
+                                    </label>
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="form-group text-center">
+                    <button type="submit" class="btn  mr-2"
+                            style="background-color:#0C2340; border-color:#0C2340; font-family: 'Avenir Heavy', sans-serif;">
+                        <i class="fa-solid fa-floppy-disk"></i> Save
+                    </button>
+                    <a asp-action="Index" class="btn btn-secondary"
+                       style="background-color:#6c757d; border-color:#6c757d; font-family: 'Avenir Heavy', sans-serif;">
+                        <i class="fa fa-arrow-left" aria-hidden="true"></i> Back to List
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+<style>
+
+    .form-check-input {
+        width: 60px;
+        height: 18px;
+        cursor: pointer;
+        background-color: #0C2340;
+        border: 2px solid #fff;
+        transition: background-color 0.3s, transform 0.2s;
+    }
+
+        .form-check-input:not(:checked) {
+            background-color: #33a5ff;
+            border-color: #0C2340;
+        }
+
+        .form-check-input:checked {
+            background-color: #28a745;
+            border-color: #28a745;
+            box-shadow: 0 0 8px rgba(40, 167, 69, 0.8);
+        }
+
+            .form-check-input:checked:focus {
+                outline: none;
+                box-shadow: 0 0 10px rgba(40, 167, 69, 0.6);
+            }
+
+    .form-check-label {
+        font-weight: bold;
+        cursor: pointer;
+        color: #0056b3;
+        transition: color 0.3s;
+    }
+
+        .form-check-label:hover {
+            color: #28a745;
+        }
+    .form-check {
+        min-width: 150px;
+    }
+
+</style>

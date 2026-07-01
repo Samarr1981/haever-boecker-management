@@ -1,0 +1,87 @@
+﻿@model haver.Models.MachineType
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<div class="container-fluid bg-light">
+    <!-- Header -->
+    <div class="row">
+        <div class="col-md-12 py-4" style="background-color:#0C2340;">
+            <h4 class="text-white" style="font-family: 'Avenir Heavy', sans-serif; font-size: 19px;">
+                Edit Machine Model
+            </h4>
+        </div>
+    </div>
+
+    <!-- Centered Form -->
+    <div class="row py-4">
+        <div class="col-md-8 offset-md-2">
+            <form asp-action="Edit" class="border p-4 shadow-sm" aria-label="Edit Machine Type Information">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <h6 class="mb-4" style="color: #0C2340;"><b>Fields marked with <span class="text-danger">*</span> are required</b></h6>
+
+                <input type="hidden" asp-for="ID" />
+
+                <div class="form-group mb-3">
+                    <label asp-for="Description" class="control-label"
+                           style="font-family: 'Avenir Roman', sans-serif; color:#0C2340;">
+                        Description <span class="text-danger">*</span>
+                        <i class="fas fa-info-circle" data-bs-toggle="tooltip" title="Edit the machine Description."></i>
+                    </label>
+                    <input asp-for="Description" class="form-control"
+                           style="border-color:#0C2340; font-family: 'Avenir Roman', sans-serif;"
+                           placeholder="Enter Machine Description" />
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+
+                @* <div class="form-group mb-3">
+                    <label asp-for="Size" class="control-label"
+                           style="font-family: 'Avenir Roman', sans-serif; color:#0C2340;">
+                        Size <span class="text-danger">*</span>
+                        <i class="fas fa-info-circle" data-bs-toggle="tooltip" title="Edit the machine size."></i>
+                    </label>
+                    <input asp-for="Size" class="form-control"
+                           style="border-color:#0C2340; font-family: 'Avenir Roman', sans-serif;"
+                           placeholder="Enter Machine Size" />
+                    <span asp-validation-for="Size" class="text-danger"></span>
+                </div>
+
+
+                <div class="form-group mb-3">
+                    <label asp-for="Deck" class="control-label"
+                           style="font-family: 'Avenir Roman', sans-serif; color:#0C2340;">
+                        Deck <span class="text-danger">*</span>
+                        <i class="fas fa-info-circle" data-bs-toggle="tooltip" title="Edit the machine Deck Size."></i>
+                    </label>
+                    <input asp-for="Deck" class="form-control"
+                           style="border-color:#0C2340; font-family: 'Avenir Roman', sans-serif;"
+                           placeholder="Enter Machine Deck" />
+                    <span asp-validation-for="Deck" class="text-danger"></span>
+                </div> *@
+
+
+                <!-- Submit Button -->
+                <div class="form-group text-center">
+                    <button type="submit" class="btn btn-primary"
+                            style="background-color:#0C2340; border-color:#0C2340; font-family: 'Avenir Heavy', sans-serif;">
+                        <i class="fa-solid fa-save"></i> Save Changes
+                    </button>
+               
+
+                <a href="@Url.Action("Index", "Engineer")" class="btn btn-primary"
+                   style="background-color:#0C2340; border-color:#0C2340; font-family: 'Avenir Heavy', sans-serif; width: 250px;">
+                    ⬅ Back to Machine Models List
+                </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
+</script>

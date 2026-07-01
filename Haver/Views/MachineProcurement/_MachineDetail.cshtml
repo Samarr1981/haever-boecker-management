@@ -1,0 +1,158 @@
+﻿@model haver.Models.Machine
+
+ @if (User.IsInRole("Admin") || User.IsInRole("Engineering") || User.IsInRole("PIC") || User.IsInRole("Sales"))
+		{
+   
+<strong style="margin-top:3px;">*You can click the sales order number to add more machines to the sales order or view its details.*</strong>
+                }
+<div class="info-container">
+    <div class="info-box p-3 bg-light border rounded mb-3">
+       
+        <dl class="row">
+            <dt class="col-md-3">Sales Order</dt>
+            @if (User.IsInRole("Admin") || User.IsInRole("Engineering") || User.IsInRole("PIC") || User.IsInRole("Sales"))
+				{
+            <dd class="col-md-3">
+                <a href="@Url.Action("Details", "SalesOrder", new { id = Model.SalesOrder.ID })"
+                       data-bs-toggle="tooltip" data-bs-placement="bottom" title="View Sales order details" target="_blank">
+                    @Html.DisplayFor(model => model.SalesOrder.OrderNumber)
+                </a>
+                </dd>
+            }
+            else
+            {
+                <dd class="col-md-3">
+                   
+                        @Html.DisplayFor(model => model.SalesOrder.OrderNumber)
+                </dd>
+            }
+            <dt class="col-md-3">Machine Model</dt>
+            <dd class="col-md-3">@Html.DisplayFor(model => Model.MachineModel)</dd>
+
+            <dt class="col-md-3">@Html.DisplayNameFor(model => Model.SerialNumber)</dt>
+            <dd class="col-md-3">@Html.DisplayFor(model => Model.SerialNumber)</dd>
+
+            <dt class="col-md-3">@Html.DisplayNameFor(model => Model.ProductionOrderNumber)</dt>
+            <dd class="col-md-3">@Html.DisplayFor(model => Model.ProductionOrderNumber)</dd>
+
+            <dt class="col-md-3">@Html.DisplayNameFor(model => Model.RToShipExp)</dt>
+            <dd class="col-md-3">@Html.DisplayFor(model => Model.RToShipExp)</dd>
+
+            <dt class="col-md-3">@Html.DisplayNameFor(model => Model.RToShipA)</dt>
+            <dd class="col-md-3">@Html.DisplayFor(model => Model.RToShipA)</dd>
+
+            <dt class="col-md-3">@Html.DisplayNameFor(model => Model.BudgetedHours)</dt>
+            <dd class="col-md-3">@Html.DisplayFor(model => Model.BudgetedHours)</dd>
+
+            <dt class="col-md-3">@Html.DisplayNameFor(model => Model.ActualAssemblyHours)</dt>
+            <dd class="col-md-3">@Html.DisplayFor(model => Model.ActualAssemblyHours)</dd>
+
+            <dt class="col-md-3">@Html.DisplayNameFor(model => Model.ReworkHours)</dt>
+            <dd class="col-md-3">@Html.DisplayFor(model => Model.ReworkHours)</dd>
+
+            <dt class="col-md-3">@Html.DisplayNameFor(model => Model.Nameplate)</dt>
+            <dd class="col-md-3">@Html.DisplayFor(model => Model.Nameplate)</dd>
+
+            <dt class="col-md-3">@Html.DisplayNameFor(model => Model.AssemblyExp)</dt>
+            <dd class="col-md-3">@Html.DisplayFor(model => Model.AssemblyExp)</dd>
+
+            <dt class="col-md-3">@Html.DisplayNameFor(model => Model.AssemblyStart)</dt>
+            <dd class="col-md-3">@Html.DisplayFor(model => Model.AssemblyStart)</dd>
+
+            <dt class="col-md-3">@Html.DisplayNameFor(model => Model.AssemblyComplete)</dt>
+            <dd class="col-md-3">@Html.DisplayFor(model => Model.AssemblyComplete)</dd>
+
+            <dt class="col-md-3">Created By</dt>
+            <dd class="col-md-3">@Html.DisplayFor(model => Model.CreatedBy)</dd>
+
+            <dt class="col-md-3">Created On</dt>
+            <dd class="col-md-3">@Html.DisplayFor(model => Model.CreatedOn)</dd>
+
+            </dl>
+        <!-- Options Section Accordion -->
+        <div class="accordion mb-3" id="optionsAccordion">
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingOptions">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOptions" aria-expanded="true" aria-controls="collapseOptions">
+                        <b>Selected Options</b>
+                    </button>
+                </h2>
+                <div id="collapseOptions" class="accordion-collapse collapse" aria-labelledby="headingOptions" data-bs-parent="#optionsAccordion">
+                    <div class="accordion-body p-2">
+                        <dl class="row opts">
+                            <dt class="col-md-2">@Html.DisplayNameFor(model => Model.Media)</dt>
+                            <dd class="col-md-2">@Html.DisplayFor(model => Model.Media)</dd>
+
+                            <dt class="col-md-2">@Html.DisplayNameFor(model => Model.SpareParts)</dt>
+                            <dd class="col-md-2">@Html.DisplayFor(model => Model.SpareParts)</dd>
+
+                            <dt class="col-md-2">@Html.DisplayNameFor(model => Model.SparePMedia)</dt>
+                            <dd class="col-md-2">@Html.DisplayFor(model => Model.SparePMedia)</dd>
+
+                            <dt class="col-md-2">@Html.DisplayNameFor(model => Model.CoatingLining)</dt>
+                            <dd class="col-md-2">@Html.DisplayFor(model => Model.CoatingLining)</dd>
+
+                            <dt class="col-md-2">@Html.DisplayNameFor(model => Model.Base)</dt>
+                            <dd class="col-md-2">@Html.DisplayFor(model => Model.Base)</dd>
+
+                            <dt class="col-md-2">@Html.DisplayNameFor(model => Model.AirSeal)</dt>
+                            <dd class="col-md-2">@Html.DisplayFor(model => Model.AirSeal)</dd>
+
+                            <dt class="col-md-2">@Html.DisplayNameFor(model => Model.Disassembly)</dt>
+                            <dd class="col-md-2">@Html.DisplayFor(model => Model.Disassembly)</dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pre-order and Scope Section Accordion -->
+        <div class="accordion mb-3" id="preOrderAccordion">
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingPreOrder">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePreOrder" aria-expanded="true" aria-controls="collapsePreOrder">
+                        <b>Pre-order and Scope Information</b>
+                    </button>
+                </h2>
+                <div id="collapsePreOrder" class="accordion-collapse collapse" aria-labelledby="headingPreOrder" data-bs-parent="#preOrderAccordion">
+                    <div class="accordion-body p-2">
+                        <dl class="row">
+                            <dt class="col-md-3">@Html.DisplayNameFor(model => Model.PreOrder)</dt>
+                            <dd class="col-md-9">@Html.Raw(Model.PreOrder)</dd>
+
+                            <dt class="col-md-3">@Html.DisplayNameFor(model => Model.Scope)</dt>
+                            <dd class="col-md-9">@Html.Raw(Model.Scope)</dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+@section Head {
+    <style>
+        .accordion-button {
+            background-color: #f8f9fa;
+            color: #0C2340;
+            font-weight: bold;
+        }
+
+            .accordion-button:hover {
+                background-color: #e9ecef;
+            }
+        .accordion-body {
+            padding: 12px 15px;
+            background-color: #fff;
+            border-top: 1px solid #ddd;
+        }
+        dt, dd {
+            margin-bottom: 6px;
+        }
+        .accordion-item {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+}

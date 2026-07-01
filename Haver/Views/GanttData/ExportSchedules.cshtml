@@ -1,0 +1,205 @@
+﻿@using haver.ViewModels
+@model haver.ViewModels.ScheduleExportOptionsViewModel
+
+<div class="container">
+    <h1 class="text-center fw-bold mb-4" style="font-size: 30px;">Export Schedules</h1>
+
+    <!-- Row for Template Load, Save, Delete -->
+    <p><b>*You can select a saved template, then click Load and Export, or you can select a template, edit it, and then Save or Delete it.*</b></p>
+
+    <div class="container p-3 border rounded shadow-sm" style="background-color: #f8f9fa;">
+        <!-- Row for Dropdown and Input -->
+        <div class="row g-3 mb-2">
+            <div class="col-12 col-lg-6">
+                <label class="fw-bold">Templates:</label>
+                <select id="templateDropdown" class="form-select shadow-sm">
+                    <option value="">-- Select Template --</option>
+                </select>
+            </div>
+            <div class="col-12 col-lg-6">
+                <label class="fw-bold">Template Name:</label>
+                <input type="text" id="templateName" class="form-control shadow-sm" placeholder="Template name" />
+            </div>
+        </div>
+
+        <!-- Row for Buttons -->
+        <div class="row g-2">
+            <div class="col-auto">
+                <button id="loadTemplateBtn" class="btn btn-sm shadow-sm text-white" style="background-color: #0C2340;">
+                    <i class="bi bi-download"></i> Load
+                </button>
+            </div>
+            <div class="col-auto">
+                <button id="saveTemplateBtn" class="btn btn-sm shadow-sm text-white" style="background-color: #0C2340;">
+                    <i class="bi bi-save2"></i> Save
+                </button>
+            </div>
+            <div class="col-auto">
+                <button id="deleteTemplateBtn" class="btn btn-sm shadow-sm text-white" style="background-color: #0C2340;">
+                    <i class="bi bi-trash"></i> Delete
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <form asp-action="DownloadSchedules" method="post" class="p-4 rounded bg-light shadow-sm border" style="margin-top:5px;">
+        <!-- Tip Section -->
+        <div class="alert alert-info shadow-sm mb-4">
+            <strong>Tip:</strong> Select or deselect columns to include in your Excel report.
+        </div>
+
+        <!-- Schedule Columns -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-dark text-white fw-bold">Schedule Columns</div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-check"><input asp-for="IncludeSalesOrderNumber" class="form-check-input" /><label asp-for="IncludeSalesOrderNumber" class="form-check-label">Sales Order Number</label></div>
+                        <div class="form-check"><input asp-for="IncludeSalesOrderDate" class="form-check-input" /><label asp-for="IncludeSalesOrderDate" class="form-check-label">Sales Order Date</label></div>
+                        <div class="form-check"><input asp-for="IncludeCustomerName" class="form-check-input" /><label asp-for="IncludeCustomerName" class="form-check-label">Customer Name</label></div>
+                        <div class="form-check"><input asp-for="IncludeMachineDescriptions" class="form-check-input" /><label asp-for="IncludeMachineDescriptions" class="form-check-label">Machine Models</label></div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-check"><input asp-for="IncludeSerialNumbers" class="form-check-input" /><label asp-for="IncludeSerialNumbers" class="form-check-label">Serial Numbers</label></div>
+                        <div class="form-check"><input asp-for="IncludeProductionOrderNumbers" class="form-check-input" /><label asp-for="IncludeProductionOrderNumbers" class="form-check-label">Production Order Numbers</label></div>
+                        <div class="form-check"><input asp-for="IncludePackageReleaseDateE" class="form-check-input" /><label asp-for="IncludePackageReleaseDateE" class="form-check-label">Package Release Expected</label></div>
+                        <div class="form-check"><input asp-for="IncludePackageReleaseDateA" class="form-check-input" /><label asp-for="IncludePackageReleaseDateA" class="form-check-label">Package Release Actual</label></div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-check"><input asp-for="IncludeMedia" class="form-check-input" /><label asp-for="IncludeMedia" class="form-check-label">Media</label></div>
+                        <div class="form-check"><input asp-for="IncludeSpareParts" class="form-check-input" /><label asp-for="IncludeSpareParts" class="form-check-label">Spare Parts</label></div>
+                        <div class="form-check"><input asp-for="IncludeBase" class="form-check-input" /><label asp-for="IncludeBase" class="form-check-label">Base</label></div>
+                        <div class="form-check"><input asp-for="IncludeAirSeal" class="form-check-input" /><label asp-for="IncludeAirSeal" class="form-check-label">Air Seal</label></div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-check"><input asp-for="IncludeDisassembly" class="form-check-input" /><label asp-for="IncludeDisassembly" class="form-check-label">Disassembly</label></div>
+                        <div class="form-check"><input asp-for="IncludeCoatingLining" class="form-check-input" /><label asp-for="IncludeCoatingLining" class="form-check-label">CoatingLining</label></div>
+                        <div class="form-check"><input asp-for="IncludeQuantity" class="form-check-input" /><label asp-for="IncludeQuantity" class="form-check-label">Quantity</label></div>
+                        <div class="form-check"><input asp-for="IncludeEngineer" class="form-check-input" /><label asp-for="IncludeEngineer" class="form-check-label">Engineer</label></div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-check"><input asp-for="IncludeVendorNames" class="form-check-input" /><label asp-for="IncludeVendorNames" class="form-check-label">Vendor Names</label></div>
+                        <div class="form-check"><input asp-for="IncludePoNumbers" class="form-check-input" /><label asp-for="IncludePoNumbers" class="form-check-label">PO Numbers</label></div>
+                        <div class="form-check"><input asp-for="IncludePoDueDates" class="form-check-input" /><label asp-for="IncludePoDueDates" class="form-check-label">PO Due Dates</label></div>
+                        <div class="form-check"><input asp-for="IncludeActualAssemblyHours" class="form-check-input" /><label asp-for="IncludeActualAssemblyHours" class="form-check-label">Assembly Hours</label></div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-check"><input asp-for="IncludeDeliveryDates" class="form-check-input" /><label asp-for="IncludeDeliveryDates" class="form-check-label">Delivery Date</label></div>
+                        <div class="form-check"><input asp-for="IncludeNotes" class="form-check-input" /><label asp-for="IncludeNotes" class="form-check-label">SO Comments</label></div>
+                        <div class="form-check"><input asp-for="IncludeReworkHours" class="form-check-input" /><label asp-for="IncludeReworkHours" class="form-check-label">Rework Hours</label></div>
+                        <div class="form-check"><input asp-for="IncludeNamePlate" class="form-check-input" /><label asp-for="IncludeNamePlate" class="form-check-label">NamePlate</label></div>
+                    </div>
+
+
+                    <div class="col-md-4">
+          
+                        <div class="form-check"><input asp-for="IncludeApprovedDrawingReceived" class="form-check-input" /><label asp-for="IncludeApprovedDrawingReceived" class="form-check-label">Approved Drawing Received</label></div>
+                        <div class="form-check">
+                            <input asp-for="IncludeGanttData" class="form-check-input" />
+                            <label asp-for="IncludeGanttData" class="form-check-label">Gantt Chart</label>
+                        </div>
+                        <div class="form-check"><input asp-for="IncludeSpecialNotes" class="form-check-input" /><label asp-for="IncludeSpecialNotes" class="form-check-label">Special Notes</label></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="mb-3 d-flex gap-2">
+            <button type="submit" class="btn btn-lg shadow-sm">
+                <i class="bi bi-file-earmark-excel-fill"></i> Export
+            </button>
+            <button type="button" id="selectAllBtn" class="btn btn-sm shadow-sm">
+                <i class="bi bi-check2-square"></i> Select All
+            </button>
+            <button type="button" id="deselectAllBtn" class="btn btn-sm shadow-sm">
+                <i class="bi bi-x-square"></i> Deselect All
+            </button>
+        </div>
+    </form>
+</div>
+
+<script>
+    // Load templates into dropdown
+    fetch('/GanttData/GetAllTemplates')
+        .then(res => res.json())
+        .then(data => {
+            const dropdown = document.getElementById('templateDropdown');
+            dropdown.innerHTML = '<option value="">-- Select Template --</option>';
+            data.forEach(name => {
+                const opt = document.createElement("option");
+                opt.value = name;
+                opt.textContent = name;
+                dropdown.appendChild(opt);
+            });
+        });
+
+
+
+    // Save template
+    document.getElementById("saveTemplateBtn").addEventListener("click", () => {
+        const name = document.getElementById("templateName").value;
+        if (!name) return alert("Enter a name to save");
+
+        const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+        const data = {};
+        checkboxes.forEach(cb => {
+            data[cb.name] = cb.checked;
+        });
+
+        fetch(`/GanttData/SaveTemplate?name=${encodeURIComponent(name)}`, {
+            method: "POST",
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        }).then(() => location.reload());
+    });
+
+    document.getElementById("loadTemplateBtn").addEventListener("click", () => {
+        const selected = document.getElementById("templateDropdown").value;
+        if (!selected) return alert("Please select a template to load");
+
+        loadTemplate(selected);
+    });
+
+    function loadTemplate(name) {
+        fetch(`/GanttData/LoadTemplate?name=${encodeURIComponent(name)}`)
+            .then(res => res.json())
+            .then(data => {
+                for (const key in data) {
+                    const checkbox = document.querySelector(`[name="${key}"]`);
+                    if (checkbox && checkbox.type === "checkbox") {
+                        checkbox.checked = data[key];
+                    }
+                }
+                document.getElementById("templateName").value = name;
+            });
+    }
+
+    // Delete template
+    document.getElementById("deleteTemplateBtn").addEventListener("click", () => {
+        const name = document.getElementById("templateName").value;
+        if (!name) return alert("Enter template name to delete");
+
+        fetch(`/GanttData/DeleteTemplate`, {
+            method: "POST",
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(name)
+        }).then(() => location.reload());
+    });
+</script>
+
+<script>
+    document.getElementById('selectAllBtn').addEventListener('click', function () {
+        const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+        checkboxes.forEach(cb => cb.checked = true);
+    });
+
+    document.getElementById('deselectAllBtn').addEventListener('click', function () {
+        const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+        checkboxes.forEach(cb => cb.checked = false);
+    });
+</script>
+
